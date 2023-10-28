@@ -1,0 +1,15 @@
+{
+    "data":[
+        {"question": "Pandas dataframe 'df' is already initialized and pandas is imported as pd.\n1. Select 5 maximal values from column 'GDP'.\n2. Multiple these values by 2.\n3. Print the resulting column.", 
+        "answer": "# Assuming you have a DataFrame named 'df'\n\n# Select the 5 maximal values from the 'GDP' column\nmax_gdp_values = df['GDP'].nlargest(5)\n# Multiply these values by 2\ndoubled_max_gdp_values = max_gdp_values * 2\n# Print the resulting column\nprint(doubled_max_gdp_values) "}
+        ,
+
+        {"question": "Pandas dataframe 'df' is already initialized and pandas is imported as pd.\n1. Find the second minimal value in column 'Temperature (C)'.\n2. Subtract 30.0 from this value.\n3. Print the result.", 
+        "answer": "# Assuming you have a DataFrame named 'df'\n\n# Find the second minimal value in the 'Temperature (C)' column\nsecond_min_temperature = df['Temperature (C)'].nsmallest(2).iloc[-1]\n# Subtract 30.0 from this value\nresult = second_min_temperature - 30.0\n# Print the result\nprint(result)"}
+        ,
+
+        {"question": "Pandas dataframe 'df' is already initialized and pandas is imported as pd.\n1. Select all values from column 'gas' that have a value higher than 200.\n2. Sum these values up.\n3. Print the result.", 
+        "answer": "# Assuming you have a DataFrame named 'df'\n\n# Select all values from the 'gas' column that are higher than 200\nfiltered_values = df[df['gas'] > 200]\n# Sum these values up\ntotal_sum = filtered_values['gas'].sum()\n# Print the result\nprint(total_sum)"}
+
+    ]
+}

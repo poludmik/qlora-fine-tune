@@ -163,7 +163,7 @@ class TrainingArguments(transformers.Seq2SeqTrainingArguments):
     optim: str = field(default='paged_adamw_32bit', metadata={"help": 'The optimizer to be used'})
     per_device_train_batch_size: int = field(default=1, metadata={"help": 'The training batch size per GPU. Increase for better speed.'})
     gradient_accumulation_steps: int = field(default=16, metadata={"help": 'How many gradients to accumulate before to perform an optimizer step'})
-    max_steps: int = field(default=10000, metadata={"help": 'How many optimizer update steps to take'})
+    max_steps: int = field(default=20, metadata={"help": 'How many optimizer update steps to take'})
     weight_decay: float = field(default=0.0, metadata={"help": 'The L2 weight decay rate of AdamW'}) # use lora dropout instead for regularization if needed
     learning_rate: float = field(default=0.0002, metadata={"help": 'The learnign rate'})
     remove_unused_columns: bool = field(default=False, metadata={"help": 'Removed unused columns. Needed to make this codebase work.'})
@@ -518,12 +518,14 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
     # LongForm
     elif args.dataset == 'longform':
         dataset = load_dataset("akoksal/LongForm")
+
     elif args.dataset == 'my-data':
-        dataset = load_dataset("json", data_files="conversations.json")
+        dataset = load_dataset("json", data_files="dataset_my.json", field="data")
         dataset = dataset.map(lambda x: {
-        'input': '### Instruction: '+ x['question'],
-        'output': '### Response: '+ x['answer']
-        }, remove_columns=['question', 'answer'])
+                'input': f"<s>[INST] {x['question'].strip()} [/INST]",
+                'output': x['answer']
+                }, remove_columns=['question', 'answer'])
+
     else:
         raise NotImplementedError(f"Dataset {args.dataset} not implemented yet.")
 
