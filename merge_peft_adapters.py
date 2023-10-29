@@ -34,15 +34,18 @@ def main():
     )
 
     print(f"Loading PEFT: {args.peft_model_path}")
-    model = PeftModel.from_pretrained(base_model, args.peft_model_path, offload_folder="offload/")
+    model = PeftModel.from_pretrained(base_model, 
+                                      args.peft_model_path,
+                                        # offload_folder="offload/",
+                                      )
     model.to(args.device)
     print(f"Running merge_and_unload")
-    model = model.merge_and_unload() # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py#L382
+    model = model.merge_and_unload()
 
-    tokenizer = AutoTokenizer.from_pretrained(args.base_model_name_or_path)
+    # tokenizer = AutoTokenizer.from_pretrained(args.base_model_name_or_path)
 
     model.save_pretrained(f"{args.output_dir}")
-    tokenizer.save_pretrained(f"{args.output_dir}")
+    # tokenizer.save_pretrained(f"{args.output_dir}")
     print(f"Model saved to {args.output_dir}")
 
 if __name__ == "__main__" :
