@@ -18,14 +18,23 @@ def main():
     args = get_args()
 
     print(f"Loading base model: {args.base_model_name_or_path}")
+    # base_model = AutoModelForCausalLM.from_pretrained(
+    #     args.base_model_name_or_path,
+    #     return_dict=True,
+    #     torch_dtype=torch.float16,
+    # )
+
     base_model = AutoModelForCausalLM.from_pretrained(
         args.base_model_name_or_path,
-        return_dict=True,
-        torch_dtype=torch.float16,
+        # load_in_4bit=True,
+        torch_dtype=torch.bfloat16,
+        device_map={"":0}, # at least started writing
+        # offload_folder="offload/",
+        # device_map="auto",
     )
 
     print(f"Loading PEFT: {args.peft_model_path}")
-    model = PeftModel.from_pretrained(base_model, args.peft_model_path)
+    model = PeftModel.from_pretrained(base_model, args.peft_model_path, offload_folder="offload/")
     model.to(args.device)
     print(f"Running merge_and_unload")
     model = model.merge_and_unload() # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py#L382

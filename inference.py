@@ -3,7 +3,8 @@ from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, LlamaTokenizer, StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
 
 model_name = "codellama/CodeLlama-7b-Instruct-hf"
-adapters_name = './output/checkpoint-20/adapter_model'
+adapters_name = './output/checkpoint-25/adapter_model'
+# adapters_config = './output/checkpoint-500/adapter_model/adapter_config.json'
 
 print(f"Starting to load the model {model_name} into memory")
 
@@ -13,7 +14,7 @@ m = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.bfloat16,
     device_map={"":0}
 )
-m = PeftModel.from_pretrained(m, adapters_name)
+m = PeftModel.from_pretrained(model=m, model_id=adapters_name)
 
 # tok = LlamaTokenizer.from_pretrained(model_name)
 tok = AutoTokenizer.from_pretrained(model_name)
